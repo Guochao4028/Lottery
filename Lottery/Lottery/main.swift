@@ -3,9 +3,10 @@
 //  Lottery
 //
 //  Created by 郭超 on 2021/3/3.
-//
+// 研究原理  详情 support
 
 import Foundation
+
 
 
 /// 从 数组里随机取出数据
