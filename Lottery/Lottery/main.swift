@@ -83,17 +83,71 @@ func sampleRandomArray(frequency: Int, dataSoureArray: [Int]) -> [[Int]] {
     return array
 }
 
+/// 获取 统计的前部数据
+/// - Parameter dictionary: 统计数据
+/// - Returns:前部数据
+func topData(dictionary:[Int: Int], topNumber: Int = 6) -> [Int] {
+    var i: Int = 0
+    var intArray = [Int]()
+    
+    /// value 排序
+    for (key, _) in dictionary.sorted(by: {$0.1 > $1.1}){
+        i += 1
+        if i <= topNumber {
+            intArray.append(key)
+        }
+    }
+    
+    return intArray
+}
+
 ///存放 1 到 33
 let array: [Int] = generateArray(start: 1, end: 33)
 ///存放 统计结果的字典
 var dictionary: [Int : Int] = [:]
-
 /// 存储 从数组里随机出的六个数
-let totalResultsArray = sampleRandomArray(frequency: 7695, dataSoureArray: array)
+//let totalResultsArray = sampleRandomArray(frequency: 7695, dataSoureArray: array)
+//
+//
+//for i in 0 ..< totalResultsArray.count {
+//    let intArray = totalResultsArray[i]
+//
+//    for j in 0 ..< intArray.count {
+//        let value = intArray[j]
+//        // 统计 所有数字出现的次数
+//        cumulative(value, dictionary: &dictionary)
+//    }
+//}
 
 
-for i in 0 ..< totalResultsArray.count {
-    let intArray = totalResultsArray[i]
+var tempIntArray :[[Int]] = []
+
+for i in 0 ..< 10000000000{
+    
+    
+    /// 存储 从数组里随机出的六个数
+    let totalResultsArray = sampleRandomArray(frequency: 7695, dataSoureArray: array)
+
+
+    for i in 0 ..< totalResultsArray.count {
+        let intArray = totalResultsArray[i]
+        
+        for j in 0 ..< intArray.count {
+            let value = intArray[j]
+            // 统计 所有数字出现的次数
+            cumulative(value, dictionary: &dictionary)
+        }
+    }
+    
+   
+    let d = topData(dictionary: dictionary)
+    print(d)
+    print(" ********* \(i) *********")
+    tempIntArray.append(d)
+}
+
+for i in 0 ..< tempIntArray.count {
+    let intArray = tempIntArray[i]
     
     for j in 0 ..< intArray.count {
         let value = intArray[j]
@@ -101,9 +155,18 @@ for i in 0 ..< totalResultsArray.count {
         cumulative(value, dictionary: &dictionary)
     }
 }
+print("----------------------------------")
+let d = topData(dictionary: dictionary)
+print(d)
 
-/// value 排序
-for (key, value) in dictionary.sorted(by: {$0.1 > $1.1}){
-    print(key , value, separator:" ====>  ")
-}
 
+
+
+
+
+
+
+//22,02,29,14,21,31
+//25,28,15,33,26,10
+//01,06,28,23,02,11
+//16,31,26,01,03,28
