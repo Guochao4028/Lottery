@@ -75,10 +75,12 @@ func sampleRandomArray(frequency: Int, dataSoureArray: [Int]) -> [[Int]] {
    
     var array: [[Int]] = []
     
-    for _ in 0 ..< frequency{
-        
+    var num: Int = 0
+    
+    repeat{
+        num += 1
         array.append(sample(size: 6, dataSoure: dataSoureArray))
-    }
+    }while (num < frequency)
     
     return array
 }
@@ -101,72 +103,67 @@ func topData(dictionary:[Int: Int], topNumber: Int = 6) -> [Int] {
     return intArray
 }
 
-///存放 1 到 33
-let array: [Int] = generateArray(start: 1, end: 33)
-///存放 统计结果的字典
-var dictionary: [Int : Int] = [:]
-/// 存储 从数组里随机出的六个数
-//let totalResultsArray = sampleRandomArray(frequency: 7695, dataSoureArray: array)
-//
-//
-//for i in 0 ..< totalResultsArray.count {
-//    let intArray = totalResultsArray[i]
-//
-//    for j in 0 ..< intArray.count {
-//        let value = intArray[j]
-//        // 统计 所有数字出现的次数
-//        cumulative(value, dictionary: &dictionary)
-//    }
-//}
+/// 统计
+/// - Parameters:
+///   - dictionary: 存放 统计的数组
+///   - dataSoure: 随机出的数组
+func statistical(dictionary: inout [Int : Int], dataSoure: [[Int]]) {
+    for i in 0 ..< dataSoure.count {
+        let intArray = dataSoure[i]
 
-
-var tempIntArray :[[Int]] = []
-
-for i in 0 ..< 10000000000{
-    
-    
-    /// 存储 从数组里随机出的六个数
-    let totalResultsArray = sampleRandomArray(frequency: 7695, dataSoureArray: array)
-
-
-    for i in 0 ..< totalResultsArray.count {
-        let intArray = totalResultsArray[i]
-        
         for j in 0 ..< intArray.count {
             let value = intArray[j]
             // 统计 所有数字出现的次数
             cumulative(value, dictionary: &dictionary)
         }
     }
-    
-   
-    let d = topData(dictionary: dictionary)
-    print(d)
-    print(" ********* \(i) *********")
-    tempIntArray.append(d)
 }
 
-for i in 0 ..< tempIntArray.count {
-    let intArray = tempIntArray[i]
-    
-    for j in 0 ..< intArray.count {
-        let value = intArray[j]
-        // 统计 所有数字出现的次数
-        cumulative(value, dictionary: &dictionary)
+///存放 1 到 33
+let array: [Int] = generateArray(start: 1, end: 33)
+///存放 统计结果的字典
+var dictionary: [Int : Int] = [:]
+/// 存储 从数组里随机出的六个数
+let totalResultsArray = sampleRandomArray(frequency: 7695, dataSoureArray: array)
+/// 统计
+statistical(dictionary: &dictionary, dataSoure: totalResultsArray)
+
+
+//穷举
+var tempIntArray :[[Int]] = []
+var tempIntArray1 :[[Int]] = []
+// 10， 50 数量越大 穷举的数越多，出来的结果越准
+for i in 0 ..< 10 {
+    for j in 0 ..< 50{
+        
+        /// 存储 从数组里随机出的六个数
+        let totalResultsArray = sampleRandomArray(frequency: 7695, dataSoureArray: array)
+        statistical(dictionary: &dictionary, dataSoure: totalResultsArray)
+        let d = topData(dictionary: dictionary)
+        tempIntArray.append(d)
+        print(j)
+        
     }
+
+    statistical(dictionary: &dictionary, dataSoure: tempIntArray)
+    print("----------------------------------")
+    let d = topData(dictionary: dictionary)
+//    print(d)
+    tempIntArray1.append(d)
+    print(i)
 }
-print("----------------------------------")
+
+
+
+
+statistical(dictionary: &dictionary, dataSoure: tempIntArray1)
 let d = topData(dictionary: dictionary)
+print("+++++++++++++++++++++++++++")
 print(d)
 
 
-
-
-
-
-
-
-//22,02,29,14,21,31
-//25,28,15,33,26,10
-//01,06,28,23,02,11
-//16,31,26,01,03,28
+//[10, 04, 15, 12, 19, 30]
+//[28, 24, 22, 27, 15, 12]
+//[06, 17, 21, 02, 19, 07]
+//[07, 16, 05, 04, 30, 21]
+//[22, 24, 12, 16, 19, 05]
